@@ -22,7 +22,7 @@ class ComplexObject
         $this->other = $other;
     }
 
-    public function doSomething() {
+    public function doSomething1() {
         // ...
     }
 }
