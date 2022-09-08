@@ -4,25 +4,20 @@ namespace App\Services;
 
 class ComplexObject
 {
-    private $foo;
+    private $test;
     private $bar;
     private $baz;
     private $other;
 
     public function __construct(
-        Foo $foo,
-        Bar $bar,
-        Baz $baz,
-        Other $other
+         $test,
     )
     {
-        $this->foo = $foo;
-        $this->bar = $bar;
-        $this->baz = $baz;
-        $this->other = $other;
+        $this->test = $test;
+
     }
 
-    public function doSomething1() {
+    public function doSomething() {
         // ...
     }
 }

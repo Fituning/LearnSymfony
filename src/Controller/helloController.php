@@ -3,17 +3,19 @@
 namespace App\Controller;
 
 use App\Services\ComplexObject;
+use App\Services\MailLogger;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class helloController
+class helloController extends AbstractController
 {
-    #[Route('/home', name :'accueil')]
-    public function home(ComplexObject $complexObject)
+    #[Route('/', name :'accueil')]
+    public function home(MailLogger $complexObject)
     {
-        return new Response(" Bienvenue sur la page d'accueil ! ");
+        return new Response(" Bienvenue sur la page d'accueil " . $complexObject->sendMail(). " !");
+        return new Response( $complexObject->sendMail());
     }
 
     #[Route('/article/{articleId<\d+>}', name :'show-article')]
