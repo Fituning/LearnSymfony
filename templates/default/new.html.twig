@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  {# templates/default/new.html.twig #}
+  {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.content) }}
+    {{ form_row(form.author) }}
+    <button type="submit" class="btn btn-primary"> Créer </button>
+  {{ form_end(form) }}
+</body>
+</html>

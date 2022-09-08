@@ -1,4 +1,13 @@
 <body>
-    <input type="text"> </input>
-    <h1> hello {{number}} </h1>
+    <h1> hello {{ name |reverse|capitalize }} </h1>
 </body>
+
+{% for i in range(1, 10) %}
+    {{ i }}
+{% endfor %}
+
+<br>
+{% set somePrice = 10.7567 %}
+
+{{ somePrice|price(2) }} {# "10.75€" #}
+

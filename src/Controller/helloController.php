@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class helloController extends AbstractController
 {
-    #[Route('/', name :'accueil')]
+    #[Route('/home', name :'accueil')]
     public function home(MailLogger $complexObject)
     {
         return new Response(" Bienvenue sur la page d'accueil " . $complexObject->sendMail(). " !");

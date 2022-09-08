@@ -4,16 +4,22 @@ namespace App\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\Routing\Annotation\Route;
 
 class homeController extends AbstractController
   {
 
-     #[Route("/home", name: "home")]
+      #[Route('/{name}', name: "hello")]
+    public function hello($name)
+    {
+        return $this->render('home/hello.html.twig', ['name' => $name]);
+    }
+
+      #[Route('/', name: "home")]
     public function number()
     {
-        $number = "input";
-        return $this->render('home/hello.html.twig', ['number' => $number,]);
+        $name = "input";
+        return $this->render('home/hello.html.twig', ['name' => $name]);
     }
 
      #[Route('/test/{slug}', name: 'home2')]
