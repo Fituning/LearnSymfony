@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 </head>
 <body>
-  {# templates/default/new.html.twig #}
-  {{ form_start(form) }}
-    {{ form_row(form.title) }}
-    {{ form_row(form.content) }}
-    {{ form_row(form.author) }}
-    <button type="submit" class="btn btn-primary"> Créer </button>
-  {{ form_end(form) }}
+    <div class="container">
+        <div class="row">
+            {{ form_start(articleForm, {'attr': {'novalidate': 'novalidate', 'class': 'col-lg-5'}}) }}
+
+            {{ form_row(articleForm.title) }}
+            {{ form_row(articleForm.content) }}
+            {{ form_row(articleForm.author) }}
+
+
+            <button type="submit" class="btn btn-primary">Créer</button>
+            <button> <a href="{{ path('showroom') }}"> retour </a>  </button>
+            {{ form_end(articleForm) }}
+
+        </div>
+    </div>
 </body>
 </html>

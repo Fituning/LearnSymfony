@@ -2,13 +2,25 @@
 
 namespace App\Entity;
 
-use
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
+
+#[ORM\Entity(), ORM\Table(name : "blog__article")]
 class Article
 {
-    private $author;
-    private $content;
+    #[ORM\Id(), ORM\GeneratedValue(strategy : "AUTO"), ORM\Column(type : "integer")]
+    public ?int $id =null;
+
+    #[Assert\Length(min : 2, max : 50, minMessage : "Title is too short", maxMessage : "Title is too long"), ORM\Column(type : "string")]
     private $title;
+    #[Assert\NotBlank(message: "Article can't be empty"), ORM\Column(type : "text")]
+    private $content;
+    #[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "string")]
+    private $author;
+    /*#[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "datetime", name : "date")]
+    public $date;*/
+
 
     /**
      * @param mixed $author
