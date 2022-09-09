@@ -18,6 +18,10 @@ class Article
     private $content;
     #[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "string")]
     private $author;
+
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    private ?Category $category = null;
+
     /*#[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "datetime", name : "date")]
     public $date;*/
 
@@ -68,5 +72,17 @@ class Article
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }
