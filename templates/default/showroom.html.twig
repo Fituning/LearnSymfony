@@ -12,10 +12,10 @@
             <div class="container" style = "margin-bottom: 25px">
                 <p style="font-weight: bold; text-decoration-style: solid"> {{ article.title |capitalize }} </p>
                 <p> {{ article.content }} </p>
-                <p style="font-weight: lighter; font-style: italic"> {{ article.author }}
-                    <button><a href="{{ path('formulaire2', {'id': article.id}) }}"> Modifier </a> </button>
-                    <button><a href="{{ path('formulaire3', {'id': article.id}) }}"> Supprimer </a> </button>
-                </p>
+                <p style="font-weight: lighter; font-style: italic"> {{ article.author }}</p>
+                <button><a href="{{ path('formulaire2', {'id': article.id}) }}"> Modifier </a> </button>
+                <button><a href="{{ path('formulaire3', {'id': article.id}) }}"> Supprimer </a> </button>
+
 
             </div>
         {% endfor %}
