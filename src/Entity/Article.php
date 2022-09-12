@@ -16,23 +16,16 @@ class Article
     private $title;
     #[Assert\NotBlank(message: "Article can't be empty"), ORM\Column(type : "text")]
     private $content;
-    #[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "string")]
-    private $author;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
 
+    #[ORM\ManyToOne(inversedBy: 'article')]
+    private ?Author $author = null;
+
     /*#[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "datetime", name : "date")]
     public $date;*/
 
-
-    /**
-     * @param mixed $author
-     */
-    public function setAuthor($author): void
-    {
-        $this->author = $author;
-    }
 
     /**
      * @param mixed $title
@@ -48,14 +41,6 @@ class Article
     public function setContent($content): void
     {
         $this->content = $content;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAuthor()
-    {
-        return $this->author;
     }
 
     /**
@@ -82,6 +67,18 @@ class Article
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?Author
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?Author $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
