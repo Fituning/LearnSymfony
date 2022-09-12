@@ -25,7 +25,7 @@ class FormController extends AbstractController
         $article = new Article();
         $article->setTitle('Hello World');
         $article->setContent('Un très court article.');
-        $article->setAuthor('Zozor');
+        $article->setAuthors('Zozor');
 
         $form = $this->createForm(ArticleType::class, $article);
 

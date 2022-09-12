@@ -17,7 +17,7 @@ class Author
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $fistName = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
@@ -26,11 +26,16 @@ class Author
     private ?string $gender = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class)]
-    private Collection $article;
+    private Collection $articles;
 
     public function __construct()
     {
-        $this->article = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->firstName . " " .$this->lastName;
     }
 
     public function getId(): ?int
@@ -38,14 +43,14 @@ class Author
         return $this->id;
     }
 
-    public function getFistName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->fistName;
+        return $this->firstName;
     }
 
-    public function setFistName(string $fistName): self
+    public function setFirstName(string $firstName): self
     {
-        $this->fistName = $fistName;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -77,16 +82,16 @@ class Author
     /**
      * @return Collection<int, Article>
      */
-    public function getArticle(): Collection
+    public function getArticles(): Collection
     {
-        return $this->article;
+        return $this->articles;
     }
 
     public function addArticle(Article $article): self
     {
-        if (!$this->article->contains($article)) {
-            $this->article->add($article);
-            $article->setAuthor($this);
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->setAuthors($this);
         }
 
         return $this;
@@ -94,10 +99,10 @@ class Author
 
     public function removeArticle(Article $article): self
     {
-        if ($this->article->removeElement($article)) {
+        if ($this->articles->removeElement($article)) {
             // set the owning side to null (unless already changed)
-            if ($article->getAuthor() === $this) {
-                $article->setAuthor(null);
+            if ($article->getAuthors() === $this) {
+                $article->setAuthors(null);
             }
         }
 

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use function PHPUnit\Framework\stringEndsWith;
 
 
 #[ORM\Entity(), ORM\Table(name : "blog__article")]
@@ -21,11 +22,16 @@ class Article
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'article')]
-    private ?Author $author = null;
+    private ?Author $authors = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
 
     /*#[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "datetime", name : "date")]
     public $date;*/
-
+    public function __toString(){
+        return (string) $this->title . " | by : " . $this->authors;
+    }
 
     /**
      * @param mixed $title
@@ -71,14 +77,26 @@ class Article
         return $this;
     }
 
-    public function getAuthor(): ?Author
+    public function getAuthors(): ?Author
     {
-        return $this->author;
+        return $this->authors;
     }
 
-    public function setAuthor(?Author $author): self
+    public function setAuthors(?Author $authors): self
     {
-        $this->author = $author;
+        $this->authors = $authors;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

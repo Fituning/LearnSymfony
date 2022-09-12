@@ -2,9 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\ArticleController;
 use App\Entity\Article;
 use App\Entity\Author;
 use App\Entity\Category;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -14,15 +16,21 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(private AdminUrlGenerator $adminUrlGenerator){
+
+    }
+
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
 //        return parent::index();
+        $url = $this->adminUrlGenerator->setController(ArticleCrudController::class)->generateUrl();
+        return $this->redirect($url);
 
 //         Option 1. You can make your dashboard redirect to some common page of your backend
 //
-         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-         return $this->redirect($adminUrlGenerator->setController(ArticleCrudController::class)->generateUrl());
+//         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+//         return $this->redirect($adminUrlGenerator->setController(ArticleCrudController::class)->generateUrl());
 
         // Option 2. You can make your dashboard redirect to different pages depending on the user
         //
@@ -77,10 +85,13 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Articles', 'fa fa-tags', Article::class);
-        yield MenuItem::linkToCrud('Category', 'fa fa-tags', Category::class);
-        yield MenuItem::linkToCrud('Author', 'fa fa-tags', Author::class);
+        yield MenuItem::linkToDashboard('Home', 'fa fa-home');
+        yield MenuItem::subMenu("blog", "fa fa-bars")->setSubItems([
+            MenuItem::linkToCrud('Articles', 'fa fa-eye', Article::class),
+            MenuItem::linkToCrud('Category', 'fa fa-tags', Category::class),
+            MenuItem::linkToCrud('Create Category', 'fa fa-plus', Category::class)->setAction(Crud::PAGE_NEW)
+        ]);
+        yield MenuItem::linkToCrud('Author', 'fa fa-eye', Author::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
