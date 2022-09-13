@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
-#[ORM\Table(name : "blog__author")]
+#[ORM\Table(name: "blog__author")]
 class Author
 {
     #[ORM\Id]
@@ -28,6 +28,7 @@ class Author
     #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'authors')]
     private Collection $articles;
 
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -35,7 +36,7 @@ class Author
 
     public function __toString(): string
     {
-        return (string) $this->firstName . " " .$this->lastName;
+        return (string)$this->firstName . " " . $this->lastName;
     }
 
     public function getId(): ?int
@@ -79,6 +80,7 @@ class Author
         return $this;
     }
 
+
     /**
      * @return Collection<int, Article>
      */
@@ -91,7 +93,7 @@ class Author
     {
         if (!$this->articles->contains($article)) {
             $this->articles->add($article);
-            $article->setAuthors($this);
+            $article->addAuthor($this);
         }
 
         return $this;
@@ -100,10 +102,7 @@ class Author
     public function removeArticle(Article $article): self
     {
         if ($this->articles->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getAuthors() === $this) {
-                $article->setAuthors(null);
-            }
+            $article->removeAuthor($this);
         }
 
         return $this;

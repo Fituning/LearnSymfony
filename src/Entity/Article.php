@@ -23,11 +23,12 @@ class Article
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
 
-    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: "articles")]
-    private Collection $authors ;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'articles'/*, cascade: ["persist"]*/)]
+    private Collection $authors;
 
     /*#[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "datetime", name : "date")]
     public $date;*/
@@ -89,36 +90,6 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection<int, Author>
-     */
-    public function getAuthors(): Collection
-    {
-        return $this->authors;
-    }
-
-    public function addAuthor(Article $author): self
-    {
-        if (!$this->authors->contains($author)) {
-            $this->authors->add($author);
-            $author->setAuthors($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuthor(Article $author): self
-    {
-        if ($this->authors->removeElement($author)) {
-            // set the owning side to null (unless already changed)
-            if ($author->getAuthors() === $this) {
-                $author->setAuthors(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -127,6 +98,34 @@ class Article
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Author>
+     */
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
+    }
+
+    public function addAuthor(Author $author): self
+    {
+        if (!$this->authors->contains($author)) {
+            $this->authors->add($author);
+            $author->addArticle($this);
+        }
+
+        return $this;
+    }
+
+
+    public function removeAuthor(Author $author): self
+    {
+        if ($this->authors->removeElement($author)) {
+            $author->removeArticle($this);
+        }
 
         return $this;
     }
