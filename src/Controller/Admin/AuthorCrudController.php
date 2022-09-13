@@ -20,17 +20,33 @@ class AuthorCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id')->hideOnForm(),
-            TextField::new('firstName'),
-            TextField::new("lastName"),
-            ChoiceField::new('gender')->setChoices([
-                "Male" => "M",
-                "Female" => "F",
-                "Undefine" => "ø"
-            ]),
-            AssociationField::new("articles")->hideOnForm(),
-        ];
+        echo "<script>console.log('Debug Objects: " . $pageName . "' );</script>";
+
+        if($pageName == "new"){
+            return [
+                IdField::new('id')->hideOnForm(),
+                TextField::new('firstName'),
+                TextField::new("lastName"),
+                ChoiceField::new('gender')->setChoices([
+                    "Male" => "M",
+                    "Female" => "F",
+                    "Undefine" => "ø"
+                ]),
+                AssociationField::new("articles")->hideOnForm(),
+            ];
+        }else{
+            return [
+                IdField::new('id')->hideOnForm(),
+                TextField::new('firstName'),
+                TextField::new("lastName"),
+                ChoiceField::new('gender')->setChoices([
+                    "Male" => "M",
+                    "Female" => "F",
+                    "Undefine" => "ø"
+                ]),
+                AssociationField::new("articles")->hideOnForm(),
+            ];
+        }
     }
 
 }

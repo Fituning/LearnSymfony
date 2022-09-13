@@ -86,12 +86,19 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Home', 'fa fa-home');
-        yield MenuItem::subMenu("blog", "fa fa-bars")->setSubItems([
-            MenuItem::linkToCrud('Articles', 'fa fa-eye', Article::class),
-            MenuItem::linkToCrud('Category', 'fa fa-tags', Category::class),
-            MenuItem::linkToCrud('Create Category', 'fa fa-plus', Category::class)->setAction(Crud::PAGE_NEW)
+
+        yield MenuItem::subMenu("Category", "fa fa-list")->setSubItems([
+            MenuItem::linkToCrud('Category', 'fa fa-eye', Category::class),
+            MenuItem::linkToCrud('Create Category', 'fa fa-plus', Category::class)->setAction(Crud::PAGE_NEW),
         ]);
-        yield MenuItem::linkToCrud('Author', 'fa fa-eye', Author::class);
+        yield MenuItem::subMenu("Article", "fa fa-pen-nib")->setSubItems([
+            MenuItem::linkToCrud('Article', 'fa fa-eye', Article::class),
+            MenuItem::linkToCrud('Create Article', 'fa fa-plus', Article::class)->setAction(Crud::PAGE_NEW),
+        ]);
+        yield MenuItem::subMenu("Authors", "fa fa-user")->setSubItems([
+            MenuItem::linkToCrud('Authors', 'fa fa-eye', Author::class),
+            MenuItem::linkToCrud('Create Authors', 'fa fa-plus', Author::class)->setAction(Crud::PAGE_NEW),
+        ]);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }

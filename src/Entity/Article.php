@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use function PHPUnit\Framework\stringEndsWith;
@@ -14,23 +16,33 @@ class Article
     public ?int $id =null;
 
     #[Assert\Length(min : 2, max : 50, minMessage : "Title is too short", maxMessage : "Title is too long"), ORM\Column(type : "string")]
-    private $title;
+    private mixed $title;
     #[Assert\NotBlank(message: "Article can't be empty"), ORM\Column(type : "text")]
-    private $content;
+    private mixed $content;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'article')]
-    private ?Author $authors = null;
+    #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: "articles")]
+    private Collection $authors ;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
     /*#[Assert\NotBlank(message: "The article should have an author"), ORM\Column(type : "datetime", name : "date")]
     public $date;*/
+
+    public function __construct() {
+        $this->authors = new ArrayCollection();
+    }
+
     public function __toString(){
-        return (string) $this->title . " | by : " . $this->authors;
+        $names = null;
+
+        foreach ($this->authors as $name ){
+            $names = $names . $name;
+        }
+        return (string) $this->title . " | by : " . $names;
     }
 
     /**
@@ -77,14 +89,32 @@ class Article
         return $this;
     }
 
-    public function getAuthors(): ?Author
+    /**
+     * @return Collection<int, Author>
+     */
+    public function getAuthors(): Collection
     {
         return $this->authors;
     }
 
-    public function setAuthors(?Author $authors): self
+    public function addAuthor(Article $author): self
     {
-        $this->authors = $authors;
+        if (!$this->authors->contains($author)) {
+            $this->authors->add($author);
+            $author->setAuthors($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthor(Article $author): self
+    {
+        if ($this->authors->removeElement($author)) {
+            // set the owning side to null (unless already changed)
+            if ($author->getAuthors() === $this) {
+                $author->setAuthors(null);
+            }
+        }
 
         return $this;
     }

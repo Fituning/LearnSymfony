@@ -3,14 +3,19 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Article;
+use App\Entity\Author;
+use App\Form\AuthorType;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use phpDocumentor\Reflection\Types\Collection;
 
 class ArticleCrudController extends AbstractCrudController
 {
@@ -22,15 +27,31 @@ class ArticleCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id')->hideOnForm(),
-            TextField::new('title')->setRequired(true)->hideOnForm(),
-            TextField::new('title', "Please Enter the title of the article :")->setRequired(true)->onlyOnForms(),
-            TextEditorField::new('content'),
-            DateField::new("createdAt")->hideOnForm(),
-            AssociationField::new('category')->setRequired(false),
-            AssociationField::new('author')->setRequired(true)
-        ];
+
+        if($pageName == "new" || $pageName == "edit"){
+            return [
+                IdField::new('id')->hideOnForm(),
+                TextField::new('title')->setRequired(true)->hideOnForm(),
+                TextField::new('title', "Please Enter the title of the article :")->setRequired(true)->onlyOnForms(),
+                TextEditorField::new('content'),
+                DateField::new("createdAt")->hideOnForm(),
+                AssociationField::new('category')->setRequired(false),
+                CollectionField::new('authors')->useEntryCrudForm()->allowDelete(false)
+                //AssociationField::new('authors')->setCrudController(AuthorCrudController::class)->setValue("authors")
+//                AssociationField::new('authors')
+            ];
+        }else{
+            return [
+                IdField::new('id')->hideOnForm(),
+                TextField::new('title')->setRequired(true)->hideOnForm(),
+                TextField::new('title', "Please Enter the title of the article :")->setRequired(true)->onlyOnForms(),
+                TextEditorField::new('content'),
+                DateField::new("createdAt")->hideOnForm(),
+                AssociationField::new('category')->setRequired(false),
+                AssociationField::new('authors')->setRequired(true)
+            ];
+        }
+
     }
 
     public function persistEntity(EntityManagerInterface $em, $entityInstance): void

@@ -25,7 +25,7 @@ class Author
     #[ORM\Column(length: 255)]
     private ?string $gender = null;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class)]
+    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'authors')]
     private Collection $articles;
 
     public function __construct()
